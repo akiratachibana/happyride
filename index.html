@@ -177,4 +177,65 @@
                 Estimated Fare: ₱<span id="fare-amount">120.00</span>
             </div>
 
-            <button 
+            <button class="btn-book" id="book-btn" onclick="startRadarSearch()">Maghanap ng Driver</button>
+        </div>
+
+        <!-- DRIVER CARD -->
+        <div id="driver-card">
+            <div class="driver-info">
+                <div class="driver-avatar">👨‍✈️</div>
+                <div class="driver-details">
+                    <h4>Kuya Jojo Mendoza</h4>
+                    <p>🚗 Toyota Vios • <b>NQR 2026</b></p>
+                    <div class="driver-rating">⭐ 4.9 (Top Driver)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // I-initialize ang mapa
+        var map = L.map('map').setView([14.5995, 120.9842], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.marker([14.5995, 120.9842]).addTo(map).bindPopup('Maynila').openPopup();
+
+        function updateFare() {
+            var p = document.getElementById('pickup').value;
+            var d = document.getElementById('dropoff').value;
+            var amt = document.getElementById('fare-amount');
+            if(p.length > 1 && d.length > 1) {
+                var total = 45 + (p.length + d.length) * 5;
+                amt.innerText = total + ".00";
+            }
+        }
+
+        function startRadarSearch() {
+            var p = document.getElementById('pickup').value;
+            var d = document.getElementById('dropoff').value;
+            var fare = document.getElementById('fare-amount').innerText;
+
+            if (!p || !d) {
+                alert("⚠️ Pakisuyong punan ang Pick-up at Drop-off points!");
+                return;
+            }
+
+            // Ipakita ang Radar
+            document.getElementById('radar-overlay').style.display = 'flex';
+            document.getElementById('driver-card').style.display = 'none';
+            document.getElementById('book-btn').disabled = true;
+            document.getElementById('book-btn').innerText = "Naghahanap...";
+
+            // 4 Segundos simulation bago lumabas ang driver card
+            setTimeout(function() {
+                document.getElementById('radar-overlay').style.display = 'none';
+                document.getElementById('book-btn').disabled = false;
+                document.getElementById('book-btn').innerText = "Mag-book Ulit";
+                document.getElementById('driver-card').style.display = 'block';
+                
+                alert(`✅ Driver Matched!\n\nSi Kuya Jojo (NQR 2026) ay papunta na para sunduin ka sa ${p}!`);
+            }, 4000); 
+        }
+    </script>
+</body>
+</html>
+
