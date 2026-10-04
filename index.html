@@ -38,16 +38,16 @@
             z-index: 1;
         }
 
-        /* 🌀 ISTILO NG RADAR ANIMATION OVERLAY */
+        /* 🌀 RADAR ANIMATION OVERLAY */
         #radar-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(36, 129, 204, 0.4); /* Transparent blue screen */
+            background-color: rgba(36, 129, 204, 0.5);
             border-radius: 12px;
-            z-index: 10; /* Mas mataas sa mapa para matakpan ito */
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -56,17 +56,16 @@
             font-weight: bold;
             font-size: 16px;
             text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-            display: none; /* Nakatago muna sa simula */
+            display: none; /* Nakatago muna */
         }
 
-        /* Ang mismong umiikot na linya ng radar */
         .radar-circle {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: #ffffff; /* Kulay puti ang umiikot na dulo */
-            animation: spin 1.5s linear infinite;
+            border-top-color: #ffffff;
+            animation: spin 1.2s linear infinite;
             margin-bottom: 10px;
             box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
@@ -108,6 +107,58 @@
             margin-top: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
+        /* 🚗 DRIVER PROFILE CARD STYLES */
+        #driver-card {
+            background-color: #f9f9f9;
+            border: 2px solid #4cd964; /* Kulay green para sa success */
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none; /* Nakatago muna */
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .driver-avatar {
+            width: 55px;
+            height: 55px;
+            background-color: #2481cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .driver-details h4 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .driver-details p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+        .driver-rating {
+            color: #ffcc00;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body>
@@ -118,46 +169,13 @@
         <!-- MAP AREA WITH RADAR OVERLAY -->
         <div class="map-container">
             <div id="map"></div>
-            
-            <!-- DITO LALABAS ANG GUMAGALAW NA RADAR -->
             <div id="radar-overlay">
                 <div class="radar-circle"></div>
-                <div id="radar-text">Naghahanap ng driver...</div>
+                <div>Naghahanap ng driver...</div>
             </div>
         </div>
 
         <!-- FORM INTERFACE -->
         <div id="booking-form">
             <div class="input-group">
-                <input type="text" id="pickup" placeholder="📍 Mula (Pick-up)" oninput="updateFare()">
-            </div>
-
-            <div class="input-group">
-                <input type="text" id="dropoff" placeholder="🏁 Patungo (Drop-off)" oninput="updateFare()">
-            </div>
-
-            <div class="fare-box">
-                Estimated Fare: ₱<span id="fare-amount">120.00</span>
-            </div>
-
-            <button class="btn-book" onclick="startRadarSearch()">Maghanap ng Driver</button>
-        </div>
-    </div>
-
-    <script>
-        // I-set up ang MAPA
-        var map = L.map('map').setView([14.5995, 120.9842], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        L.marker([14.5995, 120.9842]).addTo(map).bindPopup('Maynila').openPopup();
-
-        function updateFare() {
-            var p = document.getElementById('pickup').value;
-            var d = document.getElementById('dropoff').value;
-            var amt = document.getElementById('fare-amount');
-            if(p.length > 1 && d.length > 1) {
-                var total = 45 + (p.length + d.length) * 5;
-                amt.innerText = total + ".00";
-            }
-        }
-
-        // 🌀 H
+          
