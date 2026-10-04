@@ -1,52 +1,43 @@
-if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-  document.getElementById('passenger-name').innerText = tg.initDataUnsafe.user.first_name;
-}
+// I-set up ang MAPA (Naka-focus sa Maynila, Pilipinas)
+        const map = L.map('map').setView([14.5995, 120.9842], 12); 
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-// 2. I-set up ang MAPA (Naka-focus sa Maynila, Pilipinas)
-const map = L.map('map').setView([14.5995, 120.9842], 12); 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap'
-}).addTo(map);
+        L.marker([14.5995, 120.9842]).addTo(map)
+            .bindPopup('Kasalukuyang Lokasyon')
+            .openPopup();
 
-// Magdagdag ng simpleng marker/pin sa gitna
-L.marker([14.5995, 120.9842]).addTo(map)
-  .bindPopup('Kasalukuyang Lokasyon')
-  .openPopup();
+        function calculateFare() {
+            const pickup = document.getElementById('pickup').value;
+            const dropoff = document.getElementById('dropoff').value;
+            const fareContainer = document.getElementById('fare-container');
+            const fareAmount = document.getElementById('fare-amount');
 
-// 3. Simple at Nakatutuwang Formula para sa Pamasahe
-function calculateFare() {
-  const pickup = document.getElementById('pickup').value;
-  const dropoff = document.getElementById('dropoff').value;
-  const fareContainer = document.getElementById('fare-container');
-  const fareAmount = document.getElementById('fare-amount');
+            if (pickup.length > 2 && dropoff.length > 2) {
+                const baseFare = 45;
+                const distanceSimulation = (pickup.length + dropoff.length) * 4; 
+                const totalFare = baseFare + distanceSimulation;
 
-  // Kung may laman na ang dalawang boxes, magpapakita ng kunwaring pamasahe
-  if (pickup.length > 2 && dropoff.length > 2) {
-      // Random fare simulation sa pagitan ng ₱80 at ₱250 para maging makatotohanan
-      const baseFare = 45;
-      const distanceSimulation = (pickup.length + dropoff.length) * 4; 
-      const totalFare = baseFare + distanceSimulation;
+                fareAmount.innerText = totalFare + ".00";
+                fareContainer.style.display = "block";
+            } else {
+                fareContainer.style.display = "none";
+            }
+        }
 
-      fareAmount.innerText = totalFare + ".00";
-      fareContainer.style.display = "block";
-  } else {
-      fareContainer.style.display = "none";
-  }
-}
+        function startBooking() {
+            const pickup = document.getElementById('pickup').value;
+            const dropoff = document.getElementById('dropoff').value;
+            const fare = document.getElementById('fare-amount').innerText;
 
-// 4. Action kapag klinek ang pag-book
-function startBooking() {
-  const pickup = document.getElementById('pickup').value;
-  const dropoff = document.getElementById('dropoff').value;
-  const fare = document.getElementById('fare-amount').innerText;
+            if (!pickup || !dropoff) {
+                tg.showAlert("⚠️ Pakisuyong punan ang Pick-up at Drop-off points!");
+                return;
+            }
 
-  if (!pickup || !dropoff) {
-      tg.showAlert("⚠️ Pakisuyong punan ang Pick-up at Drop-off points!");
-      return;
-  }
-
-  tg.showAlert(🚀 Booking Confirmed!\n\n📍 Mula: ${pickup}\n🏁 Patungo: ${dropoff}\n💵 Pamasahe: ₱${fare}\n\nNaghahanap na ng driver malapit sa iyo...);
-}
-</script>
+            tg.showAlert(🚀 Booking Confirmed!\n\n📍 Mula: ${pickup}\n🏁 Patungo: ${dropoff}\n💵 Pamasahe: ₱${fare}\n\nNaghahanap na ng driver...);
+        }
+    </script>
 </body>
 </html>
