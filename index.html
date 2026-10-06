@@ -8,7 +8,7 @@
     <!-- SDK ng Telegram Mini Apps -->
     <script src="https://telegram.org"></script>
     
-    <!-- 🗄️ LIBRENG FIREBASE COMPAT SDKs (Para sa Firestore ng Pasahero at Driver) -->
+    <!-- 🗄️ FIREBASE COMPAT SDKs (Para sa Firestore Database) -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
 
@@ -75,10 +75,16 @@
             outline: none;
             background-color: #fff;
         }
-        .hint-text {
+        /* Style para sa custom file input buttons */
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 5px;
+        }
+        .file-status {
             font-size: 11px;
             color: #8e8e93;
             margin-top: 2px;
+            font-weight: bold;
         }
         .btn-submit {
             background-color: #4cd964;
@@ -98,7 +104,6 @@
             box-shadow: none;
             cursor: not-allowed;
         }
-        /* Style para sa Review Screen */
         #review-screen {
             text-align: center;
             padding: 40px 10px;
@@ -111,7 +116,7 @@
         .review-title {
             font-size: 20px;
             font-weight: bold;
-            color: #ff9500; /* Orange for under review */
+            color: #ff9500;
             margin-bottom: 10px;
         }
     </style>
@@ -124,7 +129,7 @@
         <div id="registration-form">
             <div class="header">
                 <h2>🏍️ Rider Application</h2>
-                <p>Kumpletuhin ang mga impormasyon para makapasada</p>
+                <p>Pumili ng mga totoong dokumento mula sa iyong gallery</p>
             </div>
 
             <!-- Personal Information -->
@@ -170,42 +175,58 @@
 
             <div class="form-group">
                 <label>Taon ng Modelo (Year Model)</label>
-                <input type="number" id="driver-yearmodel" placeholder="Halimbawa: 2019 / 2023">
+                <input type="number" id="driver-yearmodel" placeholder="Halimbawa: 2019 / 2026">
             </div>
 
-            <!-- Document Requirements (Gagamit ng Image URL Links para sa 100% Libreng Storage) -->
-            <div class="section-title">C. Documents & Requirements</div>
-            <p style="font-size: 11px; color:#ff3b30; margin-bottom: 10px;">⚠️ Mangyaring i-upload ang iyong mga larawan sa mga libreng site tulad ng imgbb.com o postimages.org, at i-paste ang <b>Direct Link</b> sa ibaba.</p>
+            <!-- 📸 TOOTONG PHOTO UPLOAD SECTION (100% LIBRE AT AUTOMATIC) -->
+            <div class="section-title">C. Documents & Requirements (Photo Upload)</div>
 
             <div class="form-group">
-                <label>1. Selfie na may malinaw na mukha (URL Link)</label>
-                <input type="url" id="url-selfie" placeholder="https://ibb.co">
-                <div class="hint-text">Makikita ito ng Pasahero sa iyong profile.</div>
-            </div>
-
-            <div class="form-group">
-                <label>2. Driver's License ID Card (URL Link)</label>
-                <input type="url" id="url-license" placeholder="https://ibb.co">
+                <label>1. Selfie na makikita ng Passenger (Mugshot)</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file-selfie" accept="image/*" onchange="uploadImageToImgBB('file-selfie', 'status-selfie')">
+                </div>
+                <div id="status-status-selfie" class="file-status">⚪ No file selected</div>
             </div>
 
             <div class="form-group">
-                <label>3. Isang Karagdagang Government ID (URL Link)</label>
-                <input type="url" id="url-govid" placeholder="https://ibb.co">
+                <label>2. Driver's License ID Card</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file-license" accept="image/*" onchange="uploadImageToImgBB('file-license', 'status-license')">
+                </div>
+                <div id="status-status-license" class="file-status">⚪ No file selected</div>
             </div>
 
             <div class="form-group">
-                <label>4. NBI Clearance - Dapat hindi expired (URL Link)</label>
-                <input type="url" id="url-nbi" placeholder="https://ibb.co">
+                <label>3. Isang Karagdagang Government ID</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file-govid" accept="image/*" onchange="uploadImageToImgBB('file-govid', 'status-govid')">
+                </div>
+                <div id="status-status-govid" class="file-status">⚪ No file selected</div>
             </div>
 
             <div class="form-group">
-                <label>5. Larawan ng Motor sa Harap (URL Link)</label>
-                <input type="url" id="url-motorfront" placeholder="https://ibb.co">
+                <label>4. NBI Clearance (Dapat hindi expired)</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file-nbi" accept="image/*" onchange="uploadImageToImgBB('file-nbi', 'status-nbi')">
+                </div>
+                <div id="status-status-nbi" class="file-status">⚪ No file selected</div>
             </div>
 
             <div class="form-group">
-                <label>6. Larawan ng Motor sa Likod - Kita ang Plaka (URL Link)</label>
-                <input type="url" id="url-motorback" placeholder="https://ibb.co">
+                <label>5. Larawan ng Motor sa Harap</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file-motorfront" accept="image/*" onchange="uploadImageToImgBB('file-motorfront', 'status-motorfront')">
+                </div>
+                <div id="status-status-motorfront" class="file-status">⚪ No file selected</div>
+            </div>
+
+            <div class="form-group">
+                <label>6. Larawan ng Motor sa Likod (Kita ang Plaka)</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file-motorback" accept="image/*" onchange="uploadImageToImgBB('file-motorback', 'status-motorback')">
+                </div>
+                <div id="status-status-motorback" class="file-status">⚪ No file selected</div>
             </div>
 
             <button class="btn-submit" id="submit-btn" onclick="submitDriverApplication()">Submit Application</button>
@@ -222,7 +243,8 @@
     </div>
 
     <script>
-        // 🔒 ANG IYONG TOTOONG FIREBASE CREDENTIALS AY NAKALAGAY NA NANG MAAYOS DITO:
+        // 🔒 ANG IYONG FIREBASE AT IMGBB KEYS AY CONFIG-SET NA DITO:
+        const IMGBB_API_KEY = "df2278f4fc3356ceddf2a9223db495a7";
         const firebaseConfig = {
             apiKey: "AIzaSyAmAMJ0lPW54tZ_yVHu-bgZcBusmoslLya",
             authDomain: "://firebaseapp.com",
@@ -241,12 +263,15 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-
-        // Kumpunihin ang telegram User ID para maging permanenteng ID sa Database
-        let telegramUserId = "guest_driver";
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            telegramUserId = "driver_" + tg.initDataUnsafe.user.id;
-        }
+        // Global memory box para sa mga links ng nagawang uploads na isasave sa database
+        let uploadedUrls = {
+            'status-selfie': '',
+            'status-license': '',
+            'status-govid': '',
+            'status-nbi': '',
+            'status-motorfront': '',
+            'status-motorback': ''
+        };
 
         // Suriin agad kung nag-submit na ang driver na ito dati para i-lock ang review screen
         db.collection("drivers").doc(telegramUserId).get().then((doc) => {
@@ -262,7 +287,61 @@
             console.log("Error checking driver status: ", error);
         });
 
-                // FUNKSYON PARA SA PAG-SUBMIT NG DOKUMENTO AT PILA SA DATABASE
+        // 🌀 MAHIWAGANG AUTOMATIC CLOUD PHOTO UPLOAD ENGINE
+        function uploadImageToImgBB(inputId, statusId) {
+            const fileInput = document.getElementById(inputId);
+            const statusLabel = document.getElementById('status-status-' + statusId);
+            
+            if (fileInput.files.length === 0) return;
+
+            statusLabel.innerText = "⏳ Uploading image to cloud...";
+            statusLabel.style.color = "#ff9500";
+            document.getElementById('submit-btn').disabled = true;
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // AJAX call papuntang ImgBB Server API
+            fetch(`https://imgbb.com{IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    uploadedUrls[statusId] = data.data.url; // Isave ang secure picture web link
+                    statusLabel.innerText = "🟢 Photo uploaded successfully!";
+                    statusLabel.style.color = "#4cd964";
+                } else {
+                    statusLabel.innerText = "❌ Upload failed. Try again.";
+                    statusLabel.style.color = "#ff3b30";
+                }
+                checkUploadStatuses();
+            })
+            .catch(error => {
+                console.error("Upload error:", error);
+                statusLabel.innerText = "❌ Network Error.";
+                statusLabel.style.color = "#ff3b30";
+                checkUploadStatuses();
+            });
+        }
+
+        // Siguraduhing tapos na lahat ng upload bago i-enable ang submission button
+        function checkUploadStatuses() {
+            let loading = false;
+            for (let key in uploadedUrls) {
+                const label = document.getElementById('status-status-' + key);
+                if (label && label.innerText.includes("⏳")) {
+                    loading = true;
+                }
+            }
+            if (!loading) {
+                document.getElementById('submit-btn').disabled = false;
+            }
+        }
+
+        // FUNKSYON PARA SA PAG-SAVE NG BUONG DATA SA FIRESTORE
         function submitDriverApplication() {
             const name = document.getElementById('driver-fullname').value.trim();
             const age = document.getElementById('driver-age').value.trim();
@@ -272,25 +351,23 @@
             const plate = document.getElementById('driver-platenumber').value.trim();
             const motorType = document.getElementById('driver-motortype').value.trim();
             const yearModel = document.getElementById('driver-yearmodel').value.trim();
-            
-            // Image link URLs
-            const selfie = document.getElementById('url-selfie').value.trim();
-            const license = document.getElementById('url-license').value.trim();
-            const govid = document.getElementById('url-govid').value.trim();
-            const nbi = document.getElementById('url-nbi').value.trim();
-            const mFront = document.getElementById('url-motorfront').value.trim();
-            const mBack = document.getElementById('url-motorback').value.trim();
 
-            // Balidasyon - Siguraduhing walang patlang o blanko sa 14 items
-            if (!name || !age || !phone || !birthdate || !address || !plate || !motorType || !yearModel || !selfie || !license || !govid || !nbi || !mFront || !mBack) {
-                alert("⚠️ Mangyaring punan ang lahat ng 14 na impormasyon at dokumento sa itaas!");
+            // Balidasyon - Siguraduhing walang patlang sa text fields
+            if (!name || !age || !phone || !birthdate || !address || !plate || !motorType || !yearModel) {
+                alert("⚠️ Mangyaring punan ang lahat ng Personal at Vehicle Details sa itaas!");
+                return;
+            }
+
+            // Balidasyon - Siguraduhing nakumpleto ang anim na photo uploads sa cloud
+            if (!uploadedUrls['status-selfie'] || !uploadedUrls['status-license'] || !uploadedUrls['status-govid'] || !uploadedUrls['status-nbi'] || !uploadedUrls['status-motorfront'] || !uploadedUrls['status-motorback']) {
+                alert("⚠️ Mangyaring mag-upload muna ng larawan sa lahat ng 6 na requirements sa ibaba!");
                 return;
             }
 
             document.getElementById('submit-btn').disabled = true;
-            document.getElementById('submit-btn').innerText = "Submitting...";
+            document.getElementById('submit-btn').innerText = "Submitting Data Sheet...";
 
-            // 💾 PUSHING TO FIRESTORE DATABASE
+            // 💾 PUSHING TO FIRESTORE DATABASE (Isave ang 14 items kasama ang mga link ng larawan)
             db.collection("drivers").doc(telegramUserId).set({
                 driver_id: telegramUserId,
                 full_name: name,
@@ -301,12 +378,12 @@
                 plate_number: plate,
                 motorcycle_type: motorType,
                 year_model: parseInt(yearModel),
-                selfie_url: selfie,
-                license_url: license,
-                government_id_url: govid,
-                nbi_clearance_url: nbi,
-                motor_front_url: mFront,
-                motor_back_url: mBack,
+                selfie_url: uploadedUrls['status-selfie'],
+                license_url: uploadedUrls['status-license'],
+                government_id_url: uploadedUrls['status-govid'],
+                nbi_clearance_url: uploadedUrls['status-nbi'],
+                motor_front_url: uploadedUrls['status-motorfront'],
+                motor_back_url: uploadedUrls['status-motorback'],
                 wallet_balance: 0, 
                 status: "under_review", 
                 registered_at: firebase.firestore.FieldValue.serverTimestamp()
@@ -316,7 +393,7 @@
                 showReviewScreen();
             })
             .catch((error) => {
-                alert("⚠️ Error submitting application: " + error.message);
+                alert("⚠️ Error saving to cloud database: " + error.message);
                 document.getElementById('submit-btn').disabled = false;
                 document.getElementById('submit-btn').innerText = "Submit Application";
             });
@@ -329,3 +406,4 @@
     </script>
 </body>
 </html>
+
