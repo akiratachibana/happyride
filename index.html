@@ -3,407 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Ride PH - Driver Registration</title>
-    
-    <!-- SDK ng Telegram Mini Apps -->
+    <title>Happy Ride PH</title>
     <script src="https://telegram.org"></script>
-    
-    <!-- 🗄️ FIREBASE COMPAT SDKs (Para sa Firestore Database) -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
-
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f7;
-            margin: 0;
-            padding: 15px;
-            color: #333;
-        }
-        .container {
-            max-width: 420px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: left;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h2 {
-            margin: 5px 0;
-            color: #4cd964; /* Safety Green para sa Driver Mode */
-        }
-        .header p {
-            font-size: 13px;
-            color: #666;
-            margin: 0;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2481cc;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #e5e5e5;
-            padding-bottom: 3px;
-        }
-        .form-group {
-            margin-bottom: 12px;
-        }
-        label {
-            font-size: 12px;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 4px;
-            color: #444;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: #fafafa;
-            font-size: 14px;
-        }
-        input:focus {
-            border-color: #4cd964;
-            outline: none;
-            background-color: #fff;
-        }
-        /* Style para sa custom file input buttons */
-        .file-input-wrapper {
-            position: relative;
-            margin-bottom: 5px;
-        }
-        .file-status {
-            font-size: 11px;
-            color: #8e8e93;
-            margin-top: 2px;
-            font-weight: bold;
-        }
-        .btn-submit {
-            background-color: #4cd964;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 6px rgba(76,217,100,0.2);
-        }
-        .btn-submit:disabled {
-            background-color: #aeaeae;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
-        #review-screen {
-            text-align: center;
-            padding: 40px 10px;
-            display: none;
-        }
-        .review-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-        .review-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #ff9500;
-            margin-bottom: 10px;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f7; margin: 0; padding: 15px; color: #333; text-align: left; }
+        .container { max-width: 420px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { margin: 5px 0; color: #4cd964; }
+        .section-title { font-size: 14px; font-weight: bold; color: #2481cc; margin-top: 15px; margin-bottom: 8px; border-bottom: 1px solid #e5e5e5; padding-bottom: 3px; }
+        .form-group { margin-bottom: 12px; }
+        label { font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; background-color: #fafafa; font-size: 14px; }
+        .file-status { font-size: 11px; color: #8e8e93; margin-top: 2px; font-weight: bold; }
+        .btn-submit { background-color: #4cd964; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 20px; }
+        .btn-submit:disabled { background-color: #aeaeae; }
+        #review-screen { text-align: center; padding: 40px 10px; display: none; }
+        .review-icon { font-size: 60px; margin-bottom: 15px; }
+        .review-title { font-size: 20px; font-weight: bold; color: #ff9500; }
     </style>
 </head>
 <body>
-
     <div class="container">
-        
-        <!-- 📝 DRIVER REGISTRATION FORM INTERFACE -->
         <div id="registration-form">
             <div class="header">
                 <h2>🏍️ Rider Application</h2>
-                <p>Pumili ng mga totoong dokumento mula sa iyong gallery</p>
+                <p>Pumili ng mga totoong larawan mula sa iyong gallery</p>
             </div>
-
-            <!-- Personal Information -->
             <div class="section-title">A. Personal Information</div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="driver-fullname" placeholder="Juan Dela Cruz"></div>
+            <div class="form-group"><label>Age</label><input type="number" id="driver-age" placeholder="21"></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="driver-phone" placeholder="0917XXXXXXX"></div>
+            <div class="form-group"><label>Birthdate</label><input type="date" id="driver-birthdate"></div>
+            <div class="form-group"><label>Complete Address</label><input type="text" id="driver-address" placeholder="House No., Street, Barangay, City"></div>
             
-            <div class="form-group">
-                <label>Buong Pangalan (Full Name)</label>
-                <input type="text" id="driver-fullname" placeholder="Juan Dela Cruz">
-            </div>
-            
-            <div class="form-group">
-                <label>Edad (Age)</label>
-                <input type="number" id="driver-age" placeholder="21">
-            </div>
-
-            <div class="form-group">
-                <label>Numero ng Telepono (Phone Number)</label>
-                <input type="tel" id="driver-phone" placeholder="0917XXXXXXX">
-            </div>
-
-            <div class="form-group">
-                <label>Araw ng Kapanganakan (Birthdate)</label>
-                <input type="date" id="driver-birthdate">
-            </div>
-
-            <div class="form-group">
-                <label>Kumpletong Tirahan (Complete Address)</label>
-                <input type="text" id="driver-address" placeholder="House No., Street, Barangay, City">
-            </div>
-
-            <!-- Vehicle Details -->
             <div class="section-title">B. Vehicle Details</div>
-
-            <div class="form-group">
-                <label>Plaka ng Motor (Plate Number)</label>
-                <input type="text" id="driver-platenumber" placeholder="123ABC o MV File No.">
-            </div>
-
-            <div class="form-group">
-                <label>Uri / Modelo ng Motor (Motorcycle Type)</label>
-                <input type="text" id="driver-motortype" placeholder="Halimbawa: Mio i125 / Click 125i">
-            </div>
-
-            <div class="form-group">
-                <label>Taon ng Modelo (Year Model)</label>
-                <input type="number" id="driver-yearmodel" placeholder="Halimbawa: 2019 / 2026">
-            </div>
-
-            <!-- 📸 TOOTONG PHOTO UPLOAD SECTION (100% LIBRE AT AUTOMATIC) -->
-            <div class="section-title">C. Documents & Requirements (Photo Upload)</div>
-
-            <div class="form-group">
-                <label>1. Selfie na makikita ng Passenger (Mugshot)</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="file-selfie" accept="image/*" onchange="uploadImageToImgBB('file-selfie', 'status-selfie')">
-                </div>
-                <div id="status-status-selfie" class="file-status">⚪ No file selected</div>
-            </div>
-
-            <div class="form-group">
-                <label>2. Driver's License ID Card</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="file-license" accept="image/*" onchange="uploadImageToImgBB('file-license', 'status-license')">
-                </div>
-                <div id="status-status-license" class="file-status">⚪ No file selected</div>
-            </div>
-
-            <div class="form-group">
-                <label>3. Isang Karagdagang Government ID</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="file-govid" accept="image/*" onchange="uploadImageToImgBB('file-govid', 'status-govid')">
-                </div>
-                <div id="status-status-govid" class="file-status">⚪ No file selected</div>
-            </div>
-
-            <div class="form-group">
-                <label>4. NBI Clearance (Dapat hindi expired)</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="file-nbi" accept="image/*" onchange="uploadImageToImgBB('file-nbi', 'status-nbi')">
-                </div>
-                <div id="status-status-nbi" class="file-status">⚪ No file selected</div>
-            </div>
-
-            <div class="form-group">
-                <label>5. Larawan ng Motor sa Harap</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="file-motorfront" accept="image/*" onchange="uploadImageToImgBB('file-motorfront', 'status-motorfront')">
-                </div>
-                <div id="status-status-motorfront" class="file-status">⚪ No file selected</div>
-            </div>
-
-            <div class="form-group">
-                <label>6. Larawan ng Motor sa Likod (Kita ang Plaka)</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="file-motorback" accept="image/*" onchange="uploadImageToImgBB('file-motorback', 'status-motorback')">
-                </div>
-                <div id="status-status-motorback" class="file-status">⚪ No file selected</div>
-            </div>
-
-            <button class="btn-submit" id="submit-btn" onclick="submitDriverApplication()">Submit Application</button>
+            <div class="form-group"><label>Plate Number</label><input type="text" id="driver-platenumber" placeholder="123ABC"></div>
+            <div class="form-group"><label>Motorcycle Type</label><input type="text" id="driver-motortype" placeholder="Mio i125 / Click 125i"></div>
+            <div class="form-group"><label>Year Model</label><input type="number" id="driver-yearmodel" placeholder="2019"></div>
+            
+            <div class="section-title">C. Documents (Photo Upload)</div>
+            <div class="form-group"><label>1. Selfie for Profile</label><input type="file" id="file-selfie" accept="image/*" onchange="uploadToCloud('file-selfie', 'selfie')"><div id="lbl-selfie" class="file-status">⚪ No file selected</div></div>
+            <div class="form-group"><label>2. Driver's License ID</label><input type="file" id="file-license" accept="image/*" onchange="uploadToCloud('file-license', 'license')"><div id="lbl-license" class="file-status">⚪ No file selected</div></div>
+            <div class="form-group"><label>3. One Government ID</label><input type="file" id="file-govid" accept="image/*" onchange="uploadToCloud('file-govid', 'govid')"><div id="lbl-govid" class="file-status">⚪ No file selected</div></div>
+            <div class="form-group"><label>4. NBI Clearance</label><input type="file" id="file-nbi" accept="image/*" onchange="uploadToCloud('file-nbi', 'nbi')"><div id="lbl-nbi" class="file-status">⚪ No file selected</div></div>
+            <div class="form-group"><label>5. Motor Photo (Front)</label><input type="file" id="file-mfront" accept="image/*" onchange="uploadToCloud('file-mfront', 'mfront')"><div id="lbl-mfront" class="file-status">⚪ No file selected</div></div>
+            <div class="form-group"><label>6. Motor Photo (Back with Plate)</label><input type="file" id="file-mback" accept="image/*" onchange="uploadToCloud('file-mback', 'mback')"><div id="lbl-mback" class="file-status">⚪ No file selected</div></div>
+            
+            <button class="btn-submit" id="submit-btn" onclick="submitApp()">Submit Application</button>
         </div>
-
-        <!-- ⏳ SCREEN 2: UNDER REVIEW STATUS SCREEN -->
-        <div id="review-screen">
-            <div class="review-icon">⏳</div>
-            <div class="review-title">Your profile is under review</div>
-            <p style="font-size: 15px; color: #444; line-height: 1.5;">Salamat sa iyong pag-submit! Ang iyong aplikasyon at mga dokumento ay kasalukuyang sinusuri ng Admin (Jeruel).</p>
-            <p style="font-size: 13px; color: #8e8e93; margin-top: 20px;">Mangyaring hintayin ang pag-approve o pag-decline ng iyong profile bago makabiyahe.</p>
-        </div>
-
+        <div id="review-screen"><div class="review-icon">⏳</div><div class="review-title">Your profile is under review</div><p>Salamat sa pag-submit! Ang aplikasyon mo ay kasalukuyang sinusuri ng Admin (Jeruel).</p></div>
     </div>
-
     <script>
-        // 🔒 ANG IYONG FIREBASE AT IMGBB KEYS AY CONFIG-SET NA DITO:
-        const IMGBB_API_KEY = "df2278f4fc3356ceddf2a9223db495a7";
+        const IMGBB_KEY = "df2278f4fc3356ceddf2a9223db495a7";
         const firebaseConfig = {
             apiKey: "AIzaSyAmAMJ0lPW54tZ_yVHu-bgZcBusmoslLya",
             authDomain: "://firebaseapp.com",
             projectId: "happy-ride-ph",
             storageBucket: "happy-ride-ph.firebasestorage.app",
             messagingSenderId: "530768528279",
-            appId: "1:530768528279:web:a7abdcedbe7f44d3863ad2",
-            measurementId: "G-BH8P3SWM7S"
+            appId: "1:530768528279:web:a7abdcedbe7f44d3863ad2"
         };
-
-        // I-initialize ang Firebase at Firestore Link
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
-        // I-setup ang Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        // Global memory box para sa mga links ng nagawang uploads na isasave sa database
-        let uploadedUrls = {
-            'status-selfie': '',
-            'status-license': '',
-            'status-govid': '',
-            'status-nbi': '',
-            'status-motorfront': '',
-            'status-motorback': ''
-        };
+        tg.ready(); tg.expand();
 
-        // Suriin agad kung nag-submit na ang driver na ito dati para i-lock ang review screen
+        let telegramUserId = "driver_" + (tg.initDataUnsafe?.user?.id || "guest");
+        let urls = { selfie:'', license:'', govid:'', nbi:'', mfront:'', mback:'' };
+
         db.collection("drivers").doc(telegramUserId).get().then((doc) => {
-            if (doc.exists) {
-                const driverData = doc.data();
-                if (driverData.status === "under_review") {
-                    showReviewScreen();
-                } else if (driverData.status === "approved") {
-                    alert("🟢 Approved na ang profile mo! Handa ka na para sa Wallet Dashboard.");
-                }
-            }
-        }).catch((error) => {
-            console.log("Error checking driver status: ", error);
+            if (doc.exists && doc.data().status === "under_review") { showReview(); }
         });
 
-        // 🌀 MAHIWAGANG AUTOMATIC CLOUD PHOTO UPLOAD ENGINE
-        function uploadImageToImgBB(inputId, statusId) {
-            const fileInput = document.getElementById(inputId);
-            const statusLabel = document.getElementById('status-status-' + statusId);
+        function uploadToCloud(inputId, key) {
+            const input = document.getElementById(inputId);
+            const lbl = document.getElementById('lbl-' + key);
+            if (input.files.length === 0) return;
             
-            if (fileInput.files.length === 0) return;
-
-            statusLabel.innerText = "⏳ Uploading image to cloud...";
-            statusLabel.style.color = "#ff9500";
+            lbl.innerText = "⏳ Uploading to cloud..."; lbl.style.color = "#ff9500";
             document.getElementById('submit-btn').disabled = true;
 
-            const file = fileInput.files[0];
             const formData = new FormData();
-            formData.append('image', file);
+            formData.append('image', input.files[0]);
 
-            // AJAX call papuntang ImgBB Server API
-            fetch(`https://imgbb.com{IMGBB_API_KEY}`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    uploadedUrls[statusId] = data.data.url; // Isave ang secure picture web link
-                    statusLabel.innerText = "🟢 Photo uploaded successfully!";
-                    statusLabel.style.color = "#4cd964";
-                } else {
-                    statusLabel.innerText = "❌ Upload failed. Try again.";
-                    statusLabel.style.color = "#ff3b30";
-                }
-                checkUploadStatuses();
-            })
-            .catch(error => {
-                console.error("Upload error:", error);
-                statusLabel.innerText = "❌ Network Error.";
-                statusLabel.style.color = "#ff3b30";
-                checkUploadStatuses();
-            });
+            fetch(`https://imgbb.com{IMGBB_KEY}`, { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    urls[key] = res.data.url;
+                    lbl.innerText = "🟢 Photo uploaded successfully!"; lbl.style.color = "#4cd964";
+                } else { lbl.innerText = "❌ Upload failed."; lbl.style.color = "#ff3b30"; }
+                checkStatus();
+            }).catch(() => { lbl.innerText = "❌ Error."; lbl.style.color = "#ff3b30"; checkStatus(); });
         }
 
-        // Siguraduhing tapos na lahat ng upload bago i-enable ang submission button
-        function checkUploadStatuses() {
-            let loading = false;
-            for (let key in uploadedUrls) {
-                const label = document.getElementById('status-status-' + key);
-                if (label && label.innerText.includes("⏳")) {
-                    loading = true;
-                }
-            }
-            if (!loading) {
-                document.getElementById('submit-btn').disabled = false;
-            }
+        function checkStatus() {
+            document.getElementById('submit-btn').disabled = Object.values(urls).includes('⏳');
         }
 
-        // FUNKSYON PARA SA PAG-SAVE NG BUONG DATA SA FIRESTORE
-        function submitDriverApplication() {
+        function submitApp() {
             const name = document.getElementById('driver-fullname').value.trim();
             const age = document.getElementById('driver-age').value.trim();
             const phone = document.getElementById('driver-phone').value.trim();
             const birthdate = document.getElementById('driver-birthdate').value;
             const address = document.getElementById('driver-address').value.trim();
             const plate = document.getElementById('driver-platenumber').value.trim();
-            const motorType = document.getElementById('driver-motortype').value.trim();
-            const yearModel = document.getElementById('driver-yearmodel').value.trim();
+            const motor = document.getElementById('driver-motortype').value.trim();
+            const year = document.getElementById('driver-yearmodel').value.trim();
 
-            // Balidasyon - Siguraduhing walang patlang sa text fields
-            if (!name || !age || !phone || !birthdate || !address || !plate || !motorType || !yearModel) {
-                alert("⚠️ Mangyaring punan ang lahat ng Personal at Vehicle Details sa itaas!");
-                return;
-            }
-
-            // Balidasyon - Siguraduhing nakumpleto ang anim na photo uploads sa cloud
-            if (!uploadedUrls['status-selfie'] || !uploadedUrls['status-license'] || !uploadedUrls['status-govid'] || !uploadedUrls['status-nbi'] || !uploadedUrls['status-motorfront'] || !uploadedUrls['status-motorback']) {
-                alert("⚠️ Mangyaring mag-upload muna ng larawan sa lahat ng 6 na requirements sa ibaba!");
-                return;
-            }
+            if (!name || !age || !phone || !birthdate || !address || !plate || !motor || !year) { alert("⚠️ Punan ang lahat ng personal details!"); return; }
+            if (Object.values(urls).some(x => x === '')) { alert("⚠️ I-upload muna ang lahat ng 6 na larawan!"); return; }
 
             document.getElementById('submit-btn').disabled = true;
-            document.getElementById('submit-btn').innerText = "Submitting Data Sheet...";
-
-            // 💾 PUSHING TO FIRESTORE DATABASE (Isave ang 14 items kasama ang mga link ng larawan)
             db.collection("drivers").doc(telegramUserId).set({
-                driver_id: telegramUserId,
-                full_name: name,
-                age: parseInt(age),
-                phone_number: phone,
-                birthdate: birthdate,
-                complete_address: address,
-                plate_number: plate,
-                motorcycle_type: motorType,
-                year_model: parseInt(yearModel),
-                selfie_url: uploadedUrls['status-selfie'],
-                license_url: uploadedUrls['status-license'],
-                government_id_url: uploadedUrls['status-govid'],
-                nbi_clearance_url: uploadedUrls['status-nbi'],
-                motor_front_url: uploadedUrls['status-motorfront'],
-                motor_back_url: uploadedUrls['status-motorback'],
-                wallet_balance: 0, 
-                status: "under_review", 
-                registered_at: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                alert("🚀 Application Successfully Submitted!");
-                showReviewScreen();
-            })
-            .catch((error) => {
-                alert("⚠️ Error saving to cloud database: " + error.message);
-                document.getElementById('submit-btn').disabled = false;
-                document.getElementById('submit-btn').innerText = "Submit Application";
-            });
+                driver_id: telegramUserId, full_name: name, age: parseInt(age), phone_number: phone, birthdate: birthdate, complete_address: address,
+                plate_number: plate, motorcycle_type: motor, year_model: parseInt(year),
+                selfie_url: urls.selfie, license_url: urls.license, government_id_url: urls.govid, nbi_clearance_url: urls.nbi, motor_front_url: urls.mfront, motor_back_url: urls.mback,
+                wallet_balance: 0, status: "under_review", registered_at: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => { alert("🚀 Application Submitted!"); showReview(); });
         }
-
-        function showReviewScreen() {
-            document.getElementById('registration-form').style.display = 'none';
-            document.getElementById('review-screen').style.display = 'block';
-        }
+        function showReview() { document.getElementById('registration-form').style.display = 'none'; document.getElementById('review-screen').style.display = 'block'; }
     </script>
 </body>
 </html>
-
